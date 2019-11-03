@@ -1,53 +1,50 @@
 // add styles
 import './style.css'
-// three.js
 import * as THREE from 'three'
+import Mesh from './Mesh/Mesh'
+import Material from './Material/Material'
+import { Vector3 } from 'three'
+import Wireframe from './Material/Wireframe'
+const OrbitControls = require('three-orbitcontrols')
 
-// create the scene
+
 let scene = new THREE.Scene()
-
-// create the camera
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-
-let renderer = new THREE.WebGLRenderer()
-
-// set size
+let renderer = new THREE.WebGLRenderer({
+	antialias: true
+})
 renderer.setSize(window.innerWidth, window.innerHeight)
-
-// add canvas to dom
 document.body.appendChild(renderer.domElement)
 
-// add axis to the scene
+const controls = new OrbitControls( camera, renderer.domElement );
+controls.target = scene.position;
+
 let axis = new THREE.AxesHelper(10)
+//scene.add(axis)
 
-scene.add(axis)
 
-// add lights
-let light = new THREE.DirectionalLight(0xffffff, 1.0)
-
-light.position.set(100, 100, 100)
-
+let light = new THREE.PointLight(0xffffff, 1.0)
+light.position.set(100, 70, 30)
+light.lookAt(new Vector3());
 scene.add(light)
-
-let light2 = new THREE.DirectionalLight(0xffffff, 1.0)
-
-light2.position.set(-100, 100, -100)
-
+let light2 = new THREE.AmbientLight(0xffffff, 1.0);
+light2.position.set(0, 0, 0)
 scene.add(light2)
 
-let material = new THREE.MeshBasicMaterial({
-	color: 0xaaaaaa,
-	wireframe: true
-})
+const obj = new Mesh(
+	scene,
+	[8,0.1,8,1,1,1],
+	undefined,
+	undefined,
+	new Wireframe(scene)
+	);
 
-// create a box and add it to the scene
-let box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material)
+let box = obj.mesh;
 
-scene.add(box)
+
 
 box.position.x = 0.5
 box.rotation.y = 0.5
-
 camera.position.x = 5
 camera.position.y = 5
 camera.position.z = 5
@@ -60,9 +57,24 @@ function animate(): void {
 }
 
 function render(): void {
-	let timer = 0.002 * Date.now()
-	box.position.y = 0.5 + 0.5 * Math.sin(timer)
-	box.rotation.x += 0.1
+	let timer = 1 * Date.now()
+	if(scene.children.length < 900){
+	box.rotation.x += 2*Math.tan(timer)
+	box.rotation.z += 2*Math.cos(timer)
+	box.rotation.x += 2*Math.sin(timer)
+	const obj = new Mesh(
+		scene,
+		[5,0.05,5,1,1,1],
+		undefined,
+		undefined,
+		new Wireframe(scene,new THREE.Color("hsl("+timer %360+ ", 80%, 50%)"),THREE.MeshBasicMaterial, {})
+		);
+	console.log(timer%360);
+	//box.position.y = 0.5 + 0.5 * Math.sin(timer)
+	obj.mesh.rotation.y = box.rotation.y+0.8*(timer*0.011 % 0.8)
+	obj.mesh.rotation.z = box.rotation.z+0.5*(timer*0.013 % 0.8)
+	obj.mesh.rotation.x = box.rotation.x+0.5*(timer*0.019 % 0.8)
+	}
 	renderer.render(scene, camera)
 }
 
