@@ -12,7 +12,7 @@ export default class Material {
         const params = {
             color,
             side: THREE.DoubleSide,
-            flatShading: true
+           // flatShading: true
           }
         this.params = {...params,...this.args};
         this.get = new this.type(this.params);
