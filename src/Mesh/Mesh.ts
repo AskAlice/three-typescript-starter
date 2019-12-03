@@ -3,7 +3,7 @@ import Material from '../Material/Material';
 
 export default class Mesh {
     material: any;
-    scene: THREE.Scene;
+    scene: any;
     mat: THREE.Material;
     geo: any;
     size:any;
@@ -12,7 +12,7 @@ export default class Mesh {
     mesh: THREE.Mesh;
     constructor(scene:THREE.Scene,size?:Array<number>,position?:Array<number>,rotation?:Array<number>,material?:Material) {
         this.scene = scene;
-        this.material = material || new Material(this.scene);
+        this.material = material || new Material();
         this.mat = this.getMaterial();
         this.size = size || [];
         this.position = position || [];
@@ -40,5 +40,8 @@ export default class Mesh {
             }
         }
         
+    }
+    name(name:string){
+        this.mesh.name = name;
     }
 }

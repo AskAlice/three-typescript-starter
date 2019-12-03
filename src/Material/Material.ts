@@ -6,7 +6,7 @@ export default class Material {
     type:any;
     get:THREE.MeshBasicMaterial|THREE.MeshDepthMaterial|THREE.MeshDistanceMaterial|THREE.MeshMatcapMaterial|THREE.MeshLambertMaterial|THREE.MeshNormalMaterial|THREE.MeshPhongMaterial|THREE.MeshPhysicalMaterial|THREE.MeshStandardMaterial|THREE.MeshToonMaterial;
     args: object;
-    constructor(scene: THREE.Scene,color?:string|number|THREE.Color, type?:any, args?:object){
+    constructor(color?:string|number|THREE.Color, type?:any, args?:object){
         this.type = type || THREE.MeshToonMaterial;
         this.args = args || {};
         const params = {
